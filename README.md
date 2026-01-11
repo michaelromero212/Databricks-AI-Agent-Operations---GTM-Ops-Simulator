@@ -4,6 +4,23 @@ A production-style **AI Agent Operations & GTM Ops Simulator** demonstrating how
 
 This project showcases **AI Operations, QA, governance, KPIs, dashboards, A/B testing, enablement, and GTM readiness** for a modern data and AI company.
 
+## ✨ What's New (January 2026)
+
+### Premium UI Overhaul
+- **Databricks-Inspired Design** - Professional sidebar navigation with deep blue/orange color palette
+- **Interactive Chart.js Visualizations** - Bar charts, doughnut charts, and trend lines with real-time data
+- **SQL Explorer** - Query agent run data directly with preset templates and schema reference
+- **Live Feedback Loop** - Every agent test logs to the database, updating dashboards in real-time
+
+### Key Features Added
+| Feature | Description |
+|---------|-------------|
+| 🎨 Sidebar Navigation | Persistent nav with Overview, Dashboard, Test Agent, SQL Explorer |
+| 📊 Interactive Charts | A/B Test Comparison, Performance by Task Type, Daily Trends |
+| 🔍 SQL Explorer | Run SQL queries against `agent_runs` with preset query templates |
+| ⚡ Live Data Loop | Agent tests automatically append to CSV and reflect in metrics |
+| 🧪 A/B Test Results | Visual comparison of Agent A vs Agent B with decision recommendation |
+
 ## 🎯 Project Overview
 
 This simulator demonstrates:
@@ -12,8 +29,8 @@ This simulator demonstrates:
 - **AI Agent Operations** - Agent implementation using Hugging Face LLMs
 - **QA & Validation** - Pre-deployment testing and validation workflows
 - **KPIs & Analytics** - SQL-based metrics tracking and analysis
-- **Dashboards** - Operational health monitoring (web + Jupyter)
-- **A/B Testing** - Data-driven rollout decisions
+- **Dashboards** - Operational health monitoring with interactive visualizations
+- **A/B Testing** - Data-driven rollout decisions with statistical analysis
 - **Enablement** - User guidance and business reviews
 
 ## 🏗️ Project Structure
@@ -43,7 +60,7 @@ Databricks-AI-Agent-Operations-&-GTM-Ops-Simulator/
 │   └── uploaded_inputs/              # User-uploaded files
 │
 ├── analytics/                         # Data analytics
-│   ├── load_data.py                  # Data ingestion
+│   ├── load_data.py                  # Data ingestion (DuckDB)
 │   └── queries.sql                   # SQL queries for KPIs
 │
 ├── dashboards/                        # Visualization
@@ -57,149 +74,159 @@ Databricks-AI-Agent-Operations-&-GTM-Ops-Simulator/
 │
 └── webapp/                            # Web application
     ├── app.py                        # FastAPI application
-    ├── templates/                    # HTML templates
-    │   ├── index.html               # Home page
+    ├── templates/                    # Jinja2 templates
+    │   ├── layout.html              # Shared layout with sidebar
+    │   ├── index.html               # Overview page
     │   ├── dashboard.html           # KPI dashboard
-    │   └── upload.html              # File upload
-    └── static/                       # CSS & assets
-        └── styles.css               # Styling
+    │   ├── upload.html              # Test agent page
+    │   └── explorer.html            # SQL Explorer
+    └── static/
+        └── styles.css               # Premium CSS design system
 ```
 
-## 🚀 Setup Instructions
+## 🚀 Quick Start
 
-### 1. Create Virtual Environment
+### 1. Clone & Setup
 
 ```bash
-# Navigate to project directory
-cd Databricks-AI-Agent-Operations-&-GTM-Ops-Simulator
+# Clone the repository
+git clone https://github.com/yourusername/Databricks-AI-Agent-Operations-GTM-Ops-Simulator.git
+cd Databricks-AI-Agent-Operations-GTM-Ops-Simulator
 
 # Create virtual environment
 python3 -m venv venv
+source venv/bin/activate  # macOS/Linux
+# venv\Scripts\activate   # Windows
 
-# Activate virtual environment
-# macOS/Linux:
-source venv/bin/activate
-# Windows:
-# venv\Scripts\activate
-```
-
-### 2. Install Dependencies
-
-```bash
-pip install --upgrade pip
+# Install dependencies
 pip install -r requirements.txt
 ```
 
-### 3. Configure Hugging Face Token (Optional)
-
-The agent can use a free Hugging Face LLM. To enable this:
-
-1. Get a free access token from [Hugging Face](https://huggingface.co/settings/tokens)
-2. Set the environment variable:
+### 2. Configure Hugging Face Token (Optional)
 
 ```bash
 export HF_TOKEN="your_huggingface_token_here"
 ```
 
-**Note:** The agent will use mock responses if `HF_TOKEN` is not set, allowing you to explore the system without an LLM.
+Get a free token from [Hugging Face](https://huggingface.co/settings/tokens). The agent works without a token using mock responses.
 
-### 4. Run the Web Application
+### 3. Run the Web Application
 
 ```bash
 cd webapp
-uvicorn app:app --reload --host 0.0.0.0 --port 8000
+HF_TOKEN=your_token uvicorn app:app --host 0.0.0.0 --port 8000
 ```
 
-Open your browser to: `http://localhost:8000`
-
-### 5. Explore the Jupyter Dashboard
-
-```bash
-jupyter notebook dashboards/kpi_dashboard.ipynb
-```
+Open your browser to: **http://localhost:8000**
 
 ## 📸 Screenshots
 
-### Home Page
-The landing page provides an overview of the simulator, role alignment with the AI Operations PM position, and quick access to all features.
+### Performance Overview (Home Page)
+The landing page shows real-time KPIs, A/B test comparisons, lead source performance, and recent activity—all with interactive Chart.js visualizations.
 
 ![Home Page](docs/images/home_page.jpg)
 
 ### KPI Dashboard
-Real-time operational metrics including Task Accuracy (92%), User Satisfaction (4.18/5), Resolution Time, and Error Rate. Also shows A/B test results comparing Agent A vs Agent B performance.
+Comprehensive metrics including Task Accuracy (92%), User Satisfaction (4.18/5), Resolution Time, and Error Rate. Interactive bar charts compare Agent A vs Agent B performance.
 
 ![KPI Dashboard](docs/images/dashboard_kpis.jpg)
 
-### GTM Analytics
-Performance breakdown by Task Type and Lead Source, enabling strategic decisions about which channels produce the most reliable AI outcomes.
+### SQL Explorer
+Query the `agent_runs` data directly using SQL. Includes preset query buttons for common analyses and a full schema reference.
 
-![GTM Analytics](docs/images/dashboard_gtm.jpg)
+![SQL Explorer](docs/images/sql_explorer.jpg)
 
-### Upload & Test Agent
-Upload lead data, deal notes, or sales inputs to test the AI agent. Select a task type and receive real LLM-powered analysis.
+### Test Agent
+Upload lead data, deal notes, or sales inputs to test the AI agent. Select a task type and receive real LLM-powered analysis with feedback buttons.
 
 ![Upload Page](docs/images/upload_page.jpg)
 
-### AI Agent Response (LLM Output)
-Real AI-generated analysis from the Llama-3.2 model. The agent provides a Company Overview, Industry & Use Case Fit, Suggested Qualification Questions, and Recommended Next Steps—all in ~3 seconds.
+### AI Agent Response
+Real AI-generated analysis from the Llama-3.2 model. Includes Company Overview, Industry & Use Case Fit, Suggested Questions, and Recommended Next Steps.
 
 ![Agent Response](docs/images/agent_response.jpg)
 
 ## 🎯 Role Alignment: AI Operations Program Manager
-This project is specifically designed to demonstrate the core competencies of the **AI Operations Program Manager** role at Databricks, focusing on:
 
-- **End-to-End Lifecycle Management**: From Business Intent to Field Enablement.
-- **Analytical Performance Monitoring**: SQL-driven dashboards for KPI optimization.
-- **Governance & Accountability**: Automated QA, human-in-the-loop escalation, and UAT frameworks.
-- **Continuous Improvement**: Documented **Prompt Iteration Logs** based on field feedback.
-- **Stakeholder Leadership**: Weekly Business Review (WBR) templates for cross-functional alignment.
+This project demonstrates core competencies for **AI Operations** roles:
+
+| Competency | Demonstration |
+|------------|---------------|
+| **Lifecycle Management** | From Business Intent to Field Enablement |
+| **Analytical Monitoring** | SQL-driven dashboards for KPI optimization |
+| **Governance & Accountability** | QA tests, human-in-the-loop escalation, UAT |
+| **A/B Testing** | Data-driven decisions with Agent A vs B comparison |
+| **Continuous Improvement** | Prompt iteration logs based on field feedback |
+| **Stakeholder Leadership** | Weekly Business Review templates |
 
 ## 🚀 Key Features
 
-### AI Agent
-- Accepts GTM tasks (lead summaries, follow-up suggestions, deal risk signals)
-- Uses Hugging Face free-tier LLMs (Mistral, Llama, etc.)
+### 🤖 AI Agent
+- Accepts GTM tasks: lead summaries, follow-up suggestions, deal risk signals
+- Uses Hugging Face LLMs (Llama-3.2-3B-Instruct)
 - Implements governance rules and escalation logic
 - Falls back to mock responses without token
 
-### QA & Validation
+### 📊 Interactive Dashboards
+- **Overview**: Quick KPI snapshot, A/B comparison charts, recent activity
+- **Dashboard**: Detailed metrics, trends, task type breakdown
+- **SQL Explorer**: Direct data querying with preset templates
+- **Live Updates**: Every test agent run updates the dashboards
+
+### 🔍 SQL Explorer
+Run queries directly against the agent data:
+```sql
+SELECT lead_source, COUNT(*) as volume, 
+       ROUND(AVG(CASE WHEN user_accepted THEN 1.0 ELSE 0.0 END) * 100, 1) as accuracy
+FROM agent_runs 
+GROUP BY lead_source
+ORDER BY accuracy DESC
+```
+
+### 🧪 A/B Testing
+- Real-time comparison of Agent A (control) vs Agent B (experimental)
+- Visual charts showing accuracy, satisfaction, and error rates
+- Decision recommendations based on success criteria
+- Detailed analysis in `experiments/ab_test.md`
+
+### ✅ QA & Validation
 - Structured test cases in JSON
 - Automated test runner
 - Accuracy, hallucination, and rule violation tracking
 - Results feed into analytics pipeline
 
-### Analytics & KPIs
-- Task accuracy
-- Resolution speed
-- User satisfaction proxy
-- Abstention rate
-- Agent version comparison (A/B testing)
+## 🛠️ Tech Stack
 
-### Dashboards
-- **Web Dashboard**: Real-time KPI tables and trend charts
-- **Jupyter Dashboard**: Offline analytics with professional visualizations
-
-### File Uploads
-- Upload leads, deal notes, and sales inputs
-- Safe file parsing and processing
-- Uploaded data feeds agent runs and analytics
+| Component | Technology |
+|-----------|------------|
+| Backend | FastAPI + Python |
+| Frontend | Jinja2 + Chart.js |
+| Database | DuckDB (in-memory SQL) |
+| LLM | Hugging Face Inference API |
+| Styling | Custom CSS (Databricks-inspired) |
+| Data Format | CSV with live appends |
 
 ## 🔒 Security & Best Practices
 
-- All secrets loaded via environment variables
-- No credentials committed to Git
-- Input validation and sanitization
-- Virtual environment isolation
-- Professional error handling
+- ✅ Secrets via environment variables (no credentials in code)
+- ✅ Input validation and SQL injection prevention
+- ✅ Virtual environment isolation
+- ✅ Rate limiting and security headers
+- ✅ Professional error handling
 
-## 🎓 Use Cases
+## 🧪 Running QA Tests
 
-This project is designed for:
+```bash
+python qa/run_qa.py
+```
 
-- **Portfolio Demonstrations** - Showcase AI Operations expertise
-- **Interview Presentations** - Discuss GTM AI workflows
-- **Learning** - Understand production AI agent deployment
-- **Prototyping** - Template for real GTM AI operations
+## 📈 Viewing Analytics (CLI)
+
+```bash
+python analytics/load_data.py
+```
+
+This loads data into DuckDB and executes queries from `analytics/queries.sql`.
 
 ## 📝 Documentation
 
@@ -209,22 +236,7 @@ See the `docs/` directory for detailed documentation:
 - **kpis.md** - Metric definitions and tracking methodology
 - **rollout_plan.md** - Phased deployment strategy
 - **enablement.md** - User training and guidance
-
-## 🧪 Running QA Tests
-
-```bash
-python qa/run_qa.py
-```
-
-## 📈 Viewing Analytics
-
-Analytics queries can be run via:
-
-```bash
-python analytics/load_data.py
-```
-
-This loads data into DuckDB and executes queries from `analytics/queries.sql`.
+- **experiments/ab_test.md** - A/B test methodology and results
 
 ## 🤝 Contributing
 
@@ -237,3 +249,5 @@ MIT License - See LICENSE file for details
 ---
 
 **Built to demonstrate AI Operations excellence in GTM environments**
+
+*Last Updated: January 2026*
