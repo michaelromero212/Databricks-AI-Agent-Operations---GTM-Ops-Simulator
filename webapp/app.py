@@ -46,26 +46,29 @@ async def dashboard(request: Request):
     try:
         loader.load_csv_to_db(str(data_file))
         
-        # Get metrics
-        summary = loader.get_summary_stats()
-        ab_comparison = loader.get_metrics_by_version()
-        by_task = loader.get_metrics_by_task_type()
-        trends = loader.get_daily_trends()
+        # Get summary and other metrics
+        summary_df = loader.get_summary_stats()
+        by_version_df = loader.get_metrics_by_version()
+        by_task_df = loader.get_metrics_by_task_type()
+        trends_df = loader.get_daily_trends()
         
-        # Convert to dicts
-        summary_dict = summary.to_dict('records')[0] if len(summary) > 0 else {}
-        ab_list = ab_comparison.to_dict('records')
-        task_list = by_task.to_dict('records')
-        trend_list = trends.to_dict('records')
+        # GTM Specific: Performance by Lead Source
+        by_source_query = """
+        SELECT lead_source, COUNT(*) as volume, ROUND(AVG(CASE WHEN user_accepted THEN 1.0 ELSE 0.0 END) * 100, 1) as accuracy 
+        FROM agent_runs GROUP BY lead_source ORDER BY accuracy DESC
+        """
+        by_source_df = loader.execute_query(by_source_query)
         
         loader.close()
         
         return templates.TemplateResponse("dashboard.html", {
             "request": request,
-            "summary": summary_dict,
-            "ab_comparison": ab_list,
-            "by_task": task_list,
-            "trends": trend_list
+            "summary": summary_df.iloc[0].to_dict() if not summary_df.empty else None,
+            "ab_comparison": by_version_df.to_dict('records'),
+            "by_task": by_task_df.to_dict('records'),
+            "by_source": by_source_df.to_dict('records'),
+            "trends": trends_df.to_dict('records'),
+            "error": None
         })
     except Exception as e:
         loader.close()

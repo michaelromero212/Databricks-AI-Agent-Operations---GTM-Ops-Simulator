@@ -108,6 +108,20 @@ ELSE:
 
 ---
 
+## 🔄 Systems Integration & Data Flow
+The agent acts as an Orchestration Layer between CRM and LLM.
+
+```mermaid
+graph TD
+    A[Salesforce/CRM] -->|Lead/Opp Data| B(AI Operations Simulator)
+    B -->|Context + System Prompt| C{LLM - Mistral 7B}
+    C -->|Completion| B
+    B -->|Post-Processing/Guardrails| D[User Dashboard/UI]
+    D -->|User Rating/Acceptance| E[Analytics Pipeline - DuckDB]
+    E -->|KPI Monitoring| F[Strategic Business Review]
+    B -.->|High Risk Query| G[Human Escalation/Slack]
+```
+
 ## Success Criteria
 
 ### Business Outcomes

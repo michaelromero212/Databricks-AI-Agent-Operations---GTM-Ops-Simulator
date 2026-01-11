@@ -41,15 +41,37 @@ ORDER BY total_tasks DESC;
 -- Daily Trend Analysis
 -- Track KPIs over time
 SELECT 
-    CAST(timestamp AS DATE) as date,
+    STRFTIME(timestamp, '%Y-%m-%d') as date,
     COUNT(*) as total_tasks,
     COUNT(DISTINCT user_id) as active_users,
     ROUND(AVG(CASE WHEN user_accepted THEN 1.0 ELSE 0.0 END) * 100, 1) as accuracy_pct,
     ROUND(AVG(user_rating), 2) as avg_satisfaction,
     ROUND(AVG(resolution_time_seconds), 2) as avg_resolution_time_sec
 FROM agent_runs
-GROUP BY CAST(timestamp AS DATE)
+GROUP BY date
 ORDER BY date;
+
+-- GTM Analysis: Performance by Lead Source
+-- Critical for identifying if certain inbound channels produce better AI outcomes
+SELECT 
+    lead_source,
+    COUNT(*) as volume,
+    ROUND(AVG(CASE WHEN user_accepted THEN 1.0 ELSE 0.0 END) * 100, 1) as accuracy_pct,
+    ROUND(AVG(user_rating), 2) as avg_satisfaction
+FROM agent_runs
+GROUP BY lead_source
+ORDER BY accuracy_pct DESC;
+
+-- GTM Analysis: Performance by CRM Stage
+-- Identifies if the agent struggles at specific parts of the funnel (e.g., Technical Validation)
+SELECT 
+    crm_stage,
+    COUNT(*) as volume,
+    ROUND(AVG(opportunity_value), 0) as avg_opportunity_value,
+    ROUND(AVG(CASE WHEN user_accepted THEN 1.0 ELSE 0.0 END) * 100, 1) as accuracy_pct
+FROM agent_runs
+GROUP BY crm_stage
+ORDER BY volume DESC;
 
 -- User Engagement Analysis
 -- Identify power users and adoption patterns

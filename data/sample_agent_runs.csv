@@ -1,51 +1,51 @@
-run_id,timestamp,user_id,task_type,agent_version,resolution_time_seconds,user_accepted,user_rating,abstained,error_occurred,error_type
-r001,2026-01-08 09:15:23,user_sdr_001,lead_summary,A,3.2,true,5,false,false,
-r002,2026-01-08 09:22:45,user_sdr_002,lead_summary,A,2.8,true,4,false,false,
-r003,2026-01-08 10:05:12,user_ae_001,follow_up,A,4.1,true,5,false,false,
-r004,2026-01-08 10:18:33,user_sdr_003,lead_summary,B,3.5,true,4,false,false,
-r005,2026-01-08 11:02:56,user_ae_002,risk_analysis,A,5.2,true,5,false,false,
-r006,2026-01-08 11:45:22,user_ops_001,data_hygiene,A,2.1,true,4,false,false,
-r007,2026-01-08 13:15:08,user_sdr_001,lead_summary,A,3.0,true,5,false,false,
-r008,2026-01-08 13:42:19,user_sdr_004,lead_summary,B,3.8,false,2,false,false,
-r009,2026-01-08 14:10:55,user_ae_001,follow_up,A,4.3,true,4,false,false,
-r010,2026-01-08 14:28:41,user_sdr_002,lead_summary,A,2.9,true,5,false,false,
-r011,2026-01-08 15:05:17,user_ae_003,follow_up,B,4.5,true,4,false,false,
-r012,2026-01-08 15:33:44,user_sdr_005,lead_summary,A,7.2,false,3,false,true,timeout
-r013,2026-01-08 16:12:29,user_ae_002,risk_analysis,A,5.0,true,5,false,false,
-r014,2026-01-08 16:45:03,user_ops_001,data_hygiene,A,2.3,true,4,false,false,
-r015,2026-01-08 17:02:18,user_sdr_003,lead_summary,B,3.4,true,4,false,false,
-r016,2026-01-09 09:08:42,user_sdr_001,lead_summary,A,3.1,true,5,false,false,
-r017,2026-01-09 09:35:15,user_ae_001,follow_up,A,4.2,true,5,false,false,
-r018,2026-01-09 10:12:08,user_sdr_006,lead_summary,B,3.6,true,4,false,false,
-r019,2026-01-09 10:48:23,user_ae_004,risk_analysis,B,5.5,true,3,false,false,
-r020,2026-01-09 11:15:44,user_sdr_002,lead_summary,A,2.7,true,5,false,false,
-r021,2026-01-09 11:52:19,user_ops_002,data_hygiene,A,2.0,true,4,false,false,
-r022,2026-01-09 13:05:33,user_sdr_007,lead_summary,A,3.3,false,2,false,false,
-r023,2026-01-09 13:38:47,user_ae_001,follow_up,A,4.0,true,5,false,false,
-r024,2026-01-09 14:22:11,user_sdr_003,lead_summary,B,3.7,true,4,false,false,
-r025,2026-01-09 14:56:28,user_ae_005,risk_analysis,A,5.1,true,5,true,false,
-r026,2026-01-09 15:30:42,user_sdr_001,lead_summary,A,2.9,true,5,false,false,
-r027,2026-01-09 16:08:15,user_ae_002,follow_up,B,4.6,true,4,false,false,
-r028,2026-01-09 16:42:33,user_ops_001,data_hygiene,A,2.2,true,4,false,false,
-r029,2026-01-09 17:15:09,user_sdr_004,lead_summary,A,3.2,true,4,false,false,
-r030,2026-01-09 17:48:26,user_ae_003,follow_up,A,4.1,true,5,false,false,
-r031,2026-01-10 09:10:18,user_sdr_001,lead_summary,A,3.0,true,5,false,false,
-r032,2026-01-10 09:42:37,user_sdr_008,lead_summary,B,3.9,true,4,false,false,
-r033,2026-01-10 10:15:52,user_ae_001,follow_up,A,4.2,true,5,false,false,
-r034,2026-01-10 10:52:14,user_sdr_002,lead_summary,A,2.8,true,5,false,false,
-r035,2026-01-10 11:28:39,user_ae_006,risk_analysis,B,5.8,false,3,false,false,
-r036,2026-01-10 12:05:21,user_ops_001,data_hygiene,A,2.1,true,4,false,false,
-r037,2026-01-10 13:10:44,user_sdr_003,lead_summary,B,3.5,true,4,false,false,
-r038,2026-01-10 13:45:18,user_ae_002,follow_up,A,4.3,true,5,false,false,
-r039,2026-01-10 14:20:33,user_sdr_009,lead_summary,A,3.1,true,5,false,false,
-r040,2026-01-10 14:58:47,user_ae_007,risk_analysis,A,5.0,true,5,true,false,
-r041,2026-01-10 15:35:12,user_sdr_001,lead_summary,A,2.9,true,5,false,false,
-r042,2026-01-10 16:10:28,user_ae_001,follow_up,B,4.5,true,4,false,false,
-r043,2026-01-10 16:48:55,user_ops_002,data_hygiene,A,2.3,true,4,false,false,
-r044,2026-01-10 17:22:14,user_sdr_004,lead_summary,A,3.2,true,4,false,false,
-r045,2026-01-10 17:55:39,user_ae_003,follow_up,A,4.0,true,5,false,false,
-r046,2026-01-11 09:05:22,user_sdr_001,lead_summary,A,3.1,true,5,false,false,
-r047,2026-01-11 09:38:46,user_sdr_002,lead_summary,B,3.6,true,4,false,false,
-r048,2026-01-11 10:12:14,user_ae_001,follow_up,A,4.1,true,5,false,false,
-r049,2026-01-11 10:46:33,user_sdr_010,lead_summary,A,3.0,false,3,false,false,
-r050,2026-01-11 11:20:58,user_ae_002,risk_analysis,A,5.1,true,5,false,false,
+run_id,timestamp,user_id,task_type,agent_version,resolution_time_seconds,user_accepted,user_rating,abstained,error_occurred,lead_source,crm_stage,opportunity_value
+RUN001,2026-01-08 09:15:22,USR101,lead_summary,A,3.2,True,5,False,False,Inbound - Webinar,MQL,0
+RUN002,2026-01-08 10:05:45,USR102,follow_up,A,4.5,True,4,False,False,Outbound - Cold,Discovery,50000
+RUN003,2026-01-08 11:30:12,USR101,risk_analysis,B,5.1,False,2,False,False,Inbound - Demo,Value/Impact,125000
+RUN004,2026-01-08 13:20:05,USR103,lead_summary,A,2.8,True,5,False,False,Event - Summit,SQL,0
+RUN005,2026-01-08 15:45:33,USR104,data_hygiene,A,1.5,True,4,False,False,Inbound - Whitepaper,Discovery,15000
+RUN006,2026-01-09 08:30:11,USR102,lead_summary,B,6.2,True,4,False,False,Outbound - Cold,MQL,0
+RUN007,2026-01-09 09:15:44,USR105,follow_up,A,3.8,True,5,False,False,Inbound - Webinar,Discovery,75000
+RUN008,2026-01-09 10:45:22,USR101,lead_summary,A,3.1,True,4,False,False,Outbound - Enterprise,SQL,0
+RUN009,2026-01-09 13:05:11,USR103,risk_analysis,B,4.9,True,3,False,False,Inbound - Demo,Technical Validation,250000
+RUN010,2026-01-09 14:55:02,USR106,follow_up,A,4.1,True,5,False,False,Event - Summit,Discovery,30000
+RUN011,2026-01-10 09:05:33,USR102,lead_summary,A,3.4,True,4,False,False,Inbound - Webinar,MQL,0
+RUN012,2026-01-10 10:15:11,USR107,risk_analysis,A,4.2,True,5,False,False,Inbound - Demo,Value/Impact,100000
+RUN013,2026-01-10 11:45:02,USR101,data_hygiene,B,2.5,True,4,False,False,Outbound - Cold,Discovery,0
+RUN014,2026-01-10 13:30:44,USR108,follow_up,A,3.9,True,5,False,False,Inbound - Whitepaper,Discovery,45000
+RUN015,2026-01-10 15:15:22,USR102,lead_summary,A,3.3,True,4,False,False,Event - Summit,MQL,0
+RUN016,2026-01-11 09:30:15,USR101,risk_analysis,A,4.8,True,5,False,False,Inbound - Demo,Technical Evaluation,300000
+RUN017,2026-01-11 10:20:44,USR109,lead_summary,A,3.0,True,4,False,False,Outbound - Cold,MQL,0
+RUN018,2026-01-11 11:05:12,USR101,follow_up,A,3.6,True,5,False,False,Inbound - Webinar,Discovery,60000
+RUN019,2026-01-08 09:45:22,USR110,lead_summary,A,3.5,True,4,False,False,Inbound - Webinar,MQL,0
+RUN020,2026-01-08 10:30:11,USR111,follow_up,B,4.2,True,3,False,False,Outbound - Enterprise,Discovery,95000
+RUN021,2026-01-08 11:55:02,USR101,risk_analysis,A,4.7,True,5,False,False,Inbound - Demo,Negotiation,400000
+RUN022,2026-01-08 14:15:33,USR112,lead_summary,A,2.9,True,4,False,False,Event - Summit,SQL,0
+RUN023,2026-01-08 16:05:11,USR113,data_hygiene,A,1.8,True,5,False,False,Outbound - Cold,Discovery,20000
+RUN024,2026-01-09 08:55:44,USR114,lead_summary,B,5.9,False,2,False,False,Inbound - Whitepaper,MQL,0
+RUN025,2026-01-09 10:15:22,USR101,follow_up,A,3.7,True,5,False,False,Inbound - Webinar,Discovery,80000
+RUN026,2026-01-09 11:40:11,USR115,risk_analysis,A,4.1,True,4,False,False,Inbound - Demo,Value/Impact,150000
+RUN027,2026-01-09 13:50:33,USR101,data_hygiene,A,2.1,True,5,False,False,Outbound - Cold,Discovery,0
+RUN028,2026-01-09 15:25:02,USR116,lead_summary,A,3.2,True,4,False,False,Event - Summit,MQL,0
+RUN029,2026-01-10 08:45:11,USR117,risk_analysis,A,4.5,True,5,False,False,Inbound - Demo,Technical Validation,225000
+RUN030,2026-01-10 09:55:44,USR101,follow_up,B,3.8,True,3,False,False,Inbound - Webinar,Discovery,55000
+RUN031,2026-01-10 11:15:02,USR118,lead_summary,A,3.4,True,4,False,False,Outbound - Enterprise,MQL,0
+RUN032,2026-01-10 14:05:22,USR119,risk_analysis,A,4.6,True,5,False,False,Inbound - Demo,Value/Impact,175000
+RUN033,2026-01-11 08:15:33,USR101,lead_summary,A,2.8,True,5,False,False,Inbound - Webinar,SQL,0
+RUN034,2026-01-11 09:45:11,USR120,follow_up,A,4.0,True,4,False,False,Event - Summit,Discovery,40000
+RUN035,2026-01-11 11:15:44,USR101,risk_analysis,A,4.9,True,5,False,False,Inbound - Demo,Negotiation,500000
+RUN036,2026-01-08 14:45:22,USR101,lead_summary,A,3.1,True,4,False,False,Inbound - Whitepaper,MQL,0
+RUN037,2026-01-08 16:30:11,USR121,risk_analysis,B,5.5,False,1,True,False,Inbound - Demo,Technical Evaluation,0
+RUN038,2026-01-09 11:15:33,USR101,lead_summary,A,3.0,True,5,False,False,Inbound - Webinar,SQL,0
+RUN039,2026-01-09 14:25:44,USR122,follow_up,A,4.1,True,4,False,False,Outbound - Cold,Discovery,25000
+RUN040,2026-01-10 08:15:02,USR101,risk_analysis,A,4.4,True,5,False,False,Inbound - Demo,Value/Impact,140000
+RUN041,2026-01-10 10:55:11,USR123,lead_summary,B,6.5,True,3,False,False,Event - Summit,MQL,0
+RUN042,2026-01-10 13:15:44,USR101,data_hygiene,A,1.7,True,5,False,False,Inbound - Webinar,Discovery,0
+RUN043,2026-01-10 15:45:02,USR124,follow_up,A,3.5,True,4,False,False,Inbound - Whitepaper,Discovery,35000
+RUN044,2026-01-11 09:05:33,USR101,lead_summary,A,3.2,True,5,False,False,Outbound - Enterprise,SQL,0
+RUN045,2026-01-11 10:55:11,USR125,risk_analysis,A,4.3,True,4,False,False,Inbound - Demo,Value/Impact,195000
+RUN046,2026-01-08 12:45:02,USR101,follow_up,A,3.8,True,5,False,False,Inbound - Webinar,Discovery,55000
+RUN047,2026-01-09 13:15:33,USR126,lead_summary,A,3.0,True,4,False,False,Inbound - Whitepaper,MQL,0
+RUN048,2026-01-10 14:45:11,USR101,risk_analysis,B,5.2,False,2,False,True,Inbound - Demo,Value/Impact,0
+RUN049,2026-01-11 08:30:15,USR127,lead_summary,A,3.2,True,4,False,False,Event - Summit,MQL,0
+RUN050,2026-01-11 11:20:44,USR101,follow_up,A,3.7,True,5,False,False,Inbound - Webinar,Discovery,65000

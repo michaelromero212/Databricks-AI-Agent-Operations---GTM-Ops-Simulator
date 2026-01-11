@@ -118,7 +118,16 @@ Open your browser to: `http://localhost:8000`
 jupyter notebook dashboards/kpi_dashboard.ipynb
 ```
 
-## 📊 Key Features
+## 🎯 Role Alignment: AI Operations Program Manager
+This project is specifically designed to demonstrate the core competencies of the **AI Operations Program Manager** role at Databricks, focusing on:
+
+- **End-to-End Lifecycle Management**: From Business Intent to Field Enablement.
+- **Analytical Performance Monitoring**: SQL-driven dashboards for KPI optimization.
+- **Governance & Accountability**: Automated QA, human-in-the-loop escalation, and UAT frameworks.
+- **Continuous Improvement**: Documented **Prompt Iteration Logs** based on field feedback.
+- **Stakeholder Leadership**: Weekly Business Review (WBR) templates for cross-functional alignment.
+
+## 🚀 Key Features
 
 ### AI Agent
 - Accepts GTM tasks (lead summaries, follow-up suggestions, deal risk signals)

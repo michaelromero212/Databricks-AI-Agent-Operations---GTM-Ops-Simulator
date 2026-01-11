@@ -187,6 +187,40 @@
         </div>
         {% endif %}
 
+        <!-- GTM Analysis: Performance by Lead Source -->
+        {% if by_source %}
+        <div class="card">
+            <div class="card-header" style="border-left: 4px solid #0d6efd;">
+                <h2>🎯 GTM Analysis: Performance by Lead Source</h2>
+                <p>Identifying which channels produce the most reliable AI outcomes</p>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Lead Source</th>
+                        <th>Volume</th>
+                        <th>Accuracy (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in by_source %}
+                    <tr>
+                        <td><strong>{{ row.lead_source }}</strong></td>
+                        <td>{{ row.volume }}</td>
+                        <td>
+                            <span
+                                class="badge {% if row.accuracy >= 90 %}badge-success{% elif row.accuracy >= 80 %}badge-warning{% else %}badge-danger{% endif %}">
+                                {{ row.accuracy }}%
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+
         <!-- Daily Trends -->
         {% if trends %}
         <div class="card">
