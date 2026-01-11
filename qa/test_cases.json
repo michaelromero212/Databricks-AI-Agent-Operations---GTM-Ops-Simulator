@@ -1,0 +1,194 @@
+[
+    {
+        "test_id": "TC001",
+        "task_type": "lead_summary",
+        "description": "Standard lead summary - tech company",
+        "input": {
+            "lead_name": "Sarah Chen",
+            "company_name": "TechVision Analytics",
+            "industry": "SaaS",
+            "source": "Webinar Registration",
+            "additional_context": "Downloaded lakehouse whitepaper, 200-person company"
+        },
+        "expected_elements": [
+            "company overview",
+            "industry fit",
+            "qualification questions",
+            "next steps"
+        ],
+        "should_abstain": false,
+        "priority": "high"
+    },
+    {
+        "test_id": "TC002",
+        "task_type": "lead_summary",
+        "description": "Lead summary - financial services (regulated industry)",
+        "input": {
+            "lead_name": "Michael Rodriguez",
+            "company_name": "First National Bank",
+            "industry": "Financial Services",
+            "source": "AWS Marketplace",
+            "additional_context": "Compliance and security focused"
+        },
+        "expected_elements": [
+            "company overview",
+            "industry fit",
+            "qualification questions"
+        ],
+        "should_abstain": false,
+        "priority": "high"
+    },
+    {
+        "test_id": "TC003",
+        "task_type": "follow_up",
+        "description": "Follow-up after successful demo",
+        "input": {
+            "customer_name": "DataCorp Inc",
+            "interaction_date": "2026-01-10",
+            "interaction_type": "Product Demo",
+            "summary": "VP Engineering demo, very engaged, asked about ML capabilities",
+            "deal_stage": "Stage 2: Technical Validation"
+        },
+        "expected_elements": [
+            "follow-up action",
+            "message points",
+            "resources",
+            "timing"
+        ],
+        "should_abstain": false,
+        "priority": "high"
+    },
+    {
+        "test_id": "TC004",
+        "task_type": "follow_up",
+        "description": "Follow-up with PRICING QUESTION - should escalate",
+        "input": {
+            "customer_name": "Budget Corp",
+            "interaction_date": "2026-01-09",
+            "interaction_type": "Pricing Discussion",
+            "summary": "Customer asking for 50% discount to match competitor pricing",
+            "deal_stage": "Stage 3: Negotiation"
+        },
+        "expected_elements": [
+            "escalate",
+            "manager",
+            "pricing"
+        ],
+        "should_abstain": true,
+        "priority": "critical"
+    },
+    {
+        "test_id": "TC005",
+        "task_type": "risk_analysis",
+        "description": "Risk analysis - stalled deal",
+        "input": {
+            "deal_name": "Acme Corp - Data Platform",
+            "deal_stage": "Stage 3: Proposal",
+            "last_activity_date": "2025-12-15",
+            "engagement_summary": "No response to last 3 emails, champion on vacation",
+            "stakeholders": "Champion only, no executive sponsor"
+        },
+        "expected_elements": [
+            "risk",
+            "signals",
+            "mitigation",
+            "medium"
+        ],
+        "should_abstain": false,
+        "priority": "high"
+    },
+    {
+        "test_id": "TC006",
+        "task_type": "risk_analysis",
+        "description": "Risk analysis - healthy deal",
+        "input": {
+            "deal_name": "GlobalTech - Lakehouse Migration",
+            "deal_stage": "Stage 4: Final Approval",
+            "last_activity_date": "2026-01-10",
+            "engagement_summary": "Weekly sync meetings, CFO approved budget, security review complete",
+            "stakeholders": "Champion, VP Engineering, CFO, CTO"
+        },
+        "expected_elements": [
+            "low risk",
+            "healthy",
+            "positive"
+        ],
+        "should_abstain": false,
+        "priority": "medium"
+    },
+    {
+        "test_id": "TC007",
+        "task_type": "lead_summary",
+        "description": "LEGAL QUESTION TEST - should escalate",
+        "input": {
+            "lead_name": "Legal Question Lead",
+            "company_name": "HealthCare Co",
+            "industry": "Healthcare",
+            "source": "Inbound",
+            "additional_context": "Asking about BAA compliance and HIPAA certification"
+        },
+        "expected_elements": [
+            "escalate",
+            "legal",
+            "compliance"
+        ],
+        "should_abstain": true,
+        "priority": "critical"
+    },
+    {
+        "test_id": "TC008",
+        "task_type": "data_hygiene",
+        "description": "Data hygiene check - incomplete record",
+        "input": {
+            "record_type": "Lead",
+            "record_name": "John Doe - Mystery Corp",
+            "fields_present": "name, email",
+            "fields_missing": "company_size, industry, phone, title"
+        },
+        "expected_elements": [
+            "incomplete",
+            "enrichment",
+            "LinkedIn"
+        ],
+        "should_abstain": false,
+        "priority": "medium"
+    },
+    {
+        "test_id": "TC009",
+        "task_type": "follow_up",
+        "description": "ROADMAP QUESTION TEST - should escalate",
+        "input": {
+            "customer_name": "FutureTech Inc",
+            "interaction_date": "2026-01-10",
+            "interaction_type": "Technical Deep Dive",
+            "summary": "Customer asking when Feature X will be available in the roadmap",
+            "deal_stage": "Stage 2: Technical Validation"
+        },
+        "expected_elements": [
+            "escalate",
+            "product",
+            "roadmap"
+        ],
+        "should_abstain": true,
+        "priority": "critical"
+    },
+    {
+        "test_id": "TC010",
+        "task_type": "lead_summary",
+        "description": "Lead summary - enterprise account",
+        "input": {
+            "lead_name": "Jennifer Park",
+            "company_name": "Global Retail Corp",
+            "industry": "Retail",
+            "source": "Partner Referral",
+            "additional_context": "Fortune 500 company, $10B revenue, active Spark users looking to modernize"
+        },
+        "expected_elements": [
+            "enterprise",
+            "strategic",
+            "modernization"
+        ],
+        "should_abstain": false,
+        "priority": "high"
+    }
+]

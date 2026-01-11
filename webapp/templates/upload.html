@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agent - Upload & Test</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1>📤 Upload Data & Test Agent</h1>
+            <p>Test the AI agent with your GTM data</p>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/upload" class="active">Upload Data</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        {% if success %}
+        <div class="alert alert-success">
+            <p><strong>✅ Success!</strong> File "{{ filename }}" processed successfully</p>
+            <p style="margin-top: 0.5rem;"><strong>Confidence:</strong> {{ confidence }} | <strong>Time:</strong> {{
+                resolution_time }}s</p>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>Agent Response</h2>
+            </div>
+            <div class="response-box">{{ result }}</div>
+        </div>
+        {% endif %}
+
+        {% if error %}
+        <div class="alert alert-error">
+            <strong>Error:</strong> {{ error }}
+        </div>
+        {% endif %}
+
+        <div class="card">
+            <div class="card-header">
+                <h2>Upload File for Processing</h2>
+                <p>Upload lead data, deal notes, or sales inputs for agent analysis</p>
+            </div>
+
+            <form action="/upload" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="task_type">Task Type</label>
+                    <select id="task_type" name="task_type" required>
+                        <option value="lead_summary">Lead Summary</option>
+                        <option value="follow_up">Follow-Up Suggestion</option>
+                        <option value="risk_analysis">Risk Analysis</option>
+                        <option value="data_hygiene">Data Hygiene Check</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="file">Select File (CSV, TXT, or JSON)</label>
+                    <input type="file" id="file" name="file" accept=".csv,.txt,.json" required>
+                    <p style="margin-top: 0.5rem; font-size: 0.85rem; color: #6c757d;">
+                        Upload a file containing lead information, deal notes, or sales data
+                    </p>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Upload & Process</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>💡 Example Upload Content</h2>
+            </div>
+
+            <p style="margin-bottom: 1rem;">Sample content you can save as a .txt file and upload:</p>
+
+            <pre style="background: #f8f9fa; padding: 1rem; border-radius: 4px; overflow-x: auto;">Lead Name: Sarah Chen
+Company: TechVision Analytics
+Industry: SaaS / Data Analytics
+Source: Webinar Registration - "Modern Data Stack 2026"
+Context: 
+- Downloaded lakehouse architecture whitepaper
+- Company size: 200 employees
+- Current stack: Snowflake, dbt, Fivetran
+- Pain points mentioned: High costs, slow ELT, limited ML capabilities
+- Next step: Discovery call scheduled for next week</pre>
+
+            <p style="margin-top: 1rem; margin-bottom: 1rem;">Or for a follow-up scenario:</p>
+
+            <pre style="background: #f8f9fa; padding: 1rem; border-radius: 4px; overflow-x: auto;">Customer: Acme Financial Services
+Last Interaction: Product demo on 2026-01-10
+Interaction Type: Technical Deep Dive
+Summary: VP Engineering was very engaged during lakehouse demo. 
+         Asked detailed questions about Delta Lake, Unity Catalog, and MLflow integration.
+         Mentioned current challenges with data silos and compliance requirements.
+         Interested in seeing ROI calculator and customer references.
+Deal Stage: Stage 2 - Technical Validation
+Next Steps: TBD</pre>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>ℹ️ Notes</h2>
+            </div>
+            <ul style="margin-left: 1.5rem; line-height: 2;">
+                <li>Uploaded files are saved to <code>data/uploaded_inputs/</code></li>
+                <li>Agent will extract context from the first 500 characters</li>
+                <li>If <code>HF_TOKEN</code> is not set, agent will use mock responses</li>
+                <li>Agent may escalate queries requiring legal, pricing, or executive decisions</li>
+                <li>All responses should be reviewed before using in customer communications</li>
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Databricks AI Agent Operations Simulator</p>
+    </footer>
+</body>
+
+</html>

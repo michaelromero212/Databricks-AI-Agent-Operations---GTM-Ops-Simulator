@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agent Operations - Home</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🤖 AI Agent Operations & GTM Ops Simulator</h1>
+            <p>Databricks Sales Operations - Agent Performance Dashboard</p>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="/" class="active">Home</a></li>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/upload">Upload Data</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h2>Welcome to AI Agent Operations</h2>
+                <p>Production-style AI Operations, QA, Governance, and GTM Readiness</p>
+            </div>
+
+            <div style="margin-top: 2rem;">
+                <h3 style="margin-bottom: 1rem;">🎯 What This Simulator Demonstrates</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+                    <div class="metric-card">
+                        <div class="metric-label">Business Intent & Governance</div>
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem; color: #6c757d;">
+                            How AI agent behavior is defined, constrained, and governed for GTM operations
+                        </p>
+                    </div>
+
+                    <div class="metric-card success">
+                        <div class="metric-label">QA & Validation</div>
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem; color: #6c757d;">
+                            Pre-deployment testing, accuracy validation, and hallucination detection
+                        </p>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-label">KPIs & Analytics</div>
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem; color: #6c757d;">
+                            SQL-based metrics tracking, A/B testing, and performance monitoring
+                        </p>
+                    </div>
+
+                    <div class="metric-card success">
+                        <div class="metric-label">Dashboards & Reviews</div>
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem; color: #6c757d;">
+                            Real-time operational health monitoring and business review frameworks
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 3rem;">
+                <h3 style="margin-bottom: 1rem;">🚀 Quick Start</h3>
+                <ol style="margin-left: 1.5rem; line-height: 2;">
+                    <li><strong>Dashboard:</strong> View KPIs, A/B test results, and operational metrics</li>
+                    <li><strong>Upload Data:</strong> Test the agent with lead data, deal notes, or sales inputs</li>
+                    <li><strong>Documentation:</strong> Review business intent, rollout plan, and enablement docs</li>
+                    <li><strong>Analytics:</strong> Explore Jupyter dashboards for deeper analysis</li>
+                </ol>
+            </div>
+
+            <div style="margin-top: 3rem;">
+                <h3 style="margin-bottom: 1rem;">📊 Current Status</h3>
+                <div class="metrics-grid">
+                    <div class="metric-card success">
+                        <div class="metric-label">Deployment Phase</div>
+                        <div class="metric-value">Phase 1</div>
+                        <p style="margin-top: 0.5rem; font-size: 0.85rem; color: #6c757d;">Limited Pilot (Sales Ops)</p>
+                    </div>
+
+                    <div class="metric-card success">
+                        <div class="metric-label">Agent Status</div>
+                        <div class="metric-value">✅ Active</div>
+                        <p style="margin-top: 0.5rem; font-size: 0.85rem; color: #6c757d;">Agent A + Mock Fallback</p>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-label">QA Pass Rate</div>
+                        <div class="metric-value">TBD</div>
+                        <p style="margin-top: 0.5rem; font-size: 0.85rem; color: #6c757d;">Run QA suite to test</p>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-label">Sample Data</div>
+                        <div class="metric-value">50</div>
+                        <p style="margin-top: 0.5rem; font-size: 0.85rem; color: #6c757d;">Agent runs available</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 3rem;">
+                <h3 style="margin-bottom: 1rem;">🔧 Setup Instructions</h3>
+                <div class="alert alert-success">
+                    <p><strong>Virtual Environment:</strong> This project runs in a virtual environment</p>
+                    <pre style="margin-top: 0.5rem; background: white; padding: 1rem; border-radius: 4px; overflow-x: auto;">python3 -m venv venv
+source venv/bin/activate  # On macOS/Linux
+pip install -r requirements.txt</pre>
+                </div>
+
+                <div style="margin-top: 1rem;">
+                    <p><strong>Optional: Enable Hugging Face LLM</strong></p>
+                    <p style="margin-top: 0.5rem; font-size: 0.9rem; color: #6c757d;">
+                        Set <code>HF_TOKEN</code> environment variable to use a real LLM. Without it, the agent uses mock responses.
+                    </p>
+                    <pre style="margin-top: 0.5rem; background: #f8f9fa; padding: 1rem; border-radius: 4px; overflow-x: auto;">export HF_TOKEN="your_huggingface_token_here"</pre>
+                </div>
+            </div>
+
+            <div style="margin-top: 3rem; text-align: center;">
+                <a href="/dashboard" class="btn btn-primary" style="margin-right: 1rem;">View Dashboard</a>
+                <a href="/upload" class="btn btn-success">Try Agent</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>📚 Documentation</h2>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Document</th>
+                        <th>Description</th>
+                        <th>Location</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Business Intent</strong></td>
+                        <td>Agent definition, governance, escalation rules</td>
+                        <td><code>docs/business_intent.md</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>KPIs</strong></td>
+                        <td>Metric definitions and tracking methodology</td>
+                        <td><code>docs/kpis.md</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Rollout Plan</strong></td>
+                        <td>Phased deployment strategy</td>
+                        <td><code>docs/rollout_plan.md</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Enablement</strong></td>
+                        <td>User guidance and best practices</td>
+                        <td><code>docs/enablement.md</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>A/B Test Results</strong></td>
+                        <td>Agent A vs B comparison and decision</td>
+                        <td><code>experiments/ab_test.md</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Business Review</strong></td>
+                        <td>Weekly review template</td>
+                        <td><code>reviews/weekly_business_review.md</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Databricks AI Agent Operations Simulator | Built to demonstrate GTM AI Operations excellence</p>
+    </footer>
+</body>
+</html>
