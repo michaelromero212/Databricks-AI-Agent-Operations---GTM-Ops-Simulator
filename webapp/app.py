@@ -33,8 +33,58 @@ data_file = Path(__file__).parent.parent / "data" / "sample_agent_runs.csv"
 
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
-    """Home page"""
-    return templates.TemplateResponse("index.html", {"request": request})
+    """Home page - Operational Hub with real insights"""
+    loader = DataLoader(":memory:")
+    
+    try:
+        loader.load_csv_to_db(str(data_file))
+        
+        # Get summary stats for quick insights
+        summary_df = loader.get_summary_stats()
+        
+        # Get top performing and underperforming areas
+        by_source_query = """
+        SELECT lead_source, 
+               COUNT(*) as volume, 
+               ROUND(AVG(CASE WHEN user_accepted THEN 1.0 ELSE 0.0 END) * 100, 1) as accuracy 
+        FROM agent_runs 
+        GROUP BY lead_source 
+        ORDER BY accuracy DESC
+        """
+        by_source_df = loader.execute_query(by_source_query)
+        
+        # Recent activity
+        recent_query = """
+        SELECT task_type, user_id, 
+               CASE WHEN user_accepted THEN 'Accepted' ELSE 'Rejected' END as outcome,
+               resolution_time_seconds,
+               timestamp
+        FROM agent_runs 
+        ORDER BY timestamp DESC 
+        LIMIT 5
+        """
+        recent_df = loader.execute_query(recent_query)
+        
+        # A/B Test comparison
+        ab_df = loader.get_metrics_by_version()
+        
+        loader.close()
+        
+        return templates.TemplateResponse("index.html", {
+            "request": request,
+            "summary": summary_df.iloc[0].to_dict() if not summary_df.empty else None,
+            "top_sources": by_source_df.head(3).to_dict('records'),
+            "low_sources": by_source_df.tail(2).to_dict('records'),
+            "recent_activity": recent_df.to_dict('records'),
+            "ab_comparison": ab_df.to_dict('records'),
+            "error": None
+        })
+    except Exception as e:
+        loader.close()
+        return templates.TemplateResponse("index.html", {
+            "request": request,
+            "error": str(e)
+        })
 
 
 @app.get("/dashboard", response_class=HTMLResponse)
