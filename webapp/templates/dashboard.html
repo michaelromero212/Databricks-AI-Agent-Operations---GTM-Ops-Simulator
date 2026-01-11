@@ -195,7 +195,7 @@
         {% if ab_comparison | length > 1 %}
     {
         label: 'Agent B',
-            data: [{{ ab_comparison[1].accuracy_pct }}, { { ab_comparison[1].avg_satisfaction } }, { { ab_comparison[1].avg_resolution_time } }, { { ab_comparison[1].error_rate } }],
+            data: [{{ ab_comparison[1].accuracy_pct }}, {{ab_comparison[1].avg_satisfaction}}, {{ab_comparison[1].avg_resolution_time}}, {{ab_comparison[1].error_rate}}],
     backgroundColor: '#f59e0b',
         borderRadius: 4
             }
@@ -205,10 +205,10 @@
     options: {
         responsive: true,
             maintainAspectRatio: false,
-                plugins: { legend: { position: 'top' } },
+                plugins: { legend: { position: 'top'}},
         scales: {
-            y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
-            x: { grid: { display: false } }
+            y: { beginAtZero: true, grid: { color: '#f1f5f9'}},
+            x: { grid: { display: false}}
         }
     }
 });
@@ -253,7 +253,7 @@
             },
     {
         label: 'Tasks',
-            data: [{% for t in trends %} { { t.total_tasks } } {% if not loop.last %}, {% endif %} {% endfor %}],
+            data: [{% for t in trends %} {{t.total_tasks}} {% if not loop.last %}, {% endif %} {% endfor %}],
     borderColor: '#1b3a4b',
         backgroundColor: 'transparent',
             tension: 0.3,
@@ -265,11 +265,11 @@
         responsive: true,
             maintainAspectRatio: false,
                 interaction: { intersect: false, mode: 'index' },
-        plugins: { legend: { position: 'top' } },
+        plugins: { legend: { position: 'top'}},
         scales: {
-            y: { beginAtZero: true, max: 100, position: 'left', grid: { color: '#f1f5f9' } },
-            y1: { beginAtZero: true, position: 'right', grid: { display: false } },
-            x: { grid: { display: false } }
+            y: { beginAtZero: true, max: 100, position: 'left', grid: { color: '#f1f5f9'}},
+            y1: { beginAtZero: true, position: 'right', grid: { display: false}},
+            x: { grid: { display: false}}
         }
     }
 });
