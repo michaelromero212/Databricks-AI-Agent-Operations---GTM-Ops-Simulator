@@ -145,11 +145,6 @@ Real AI-generated analysis from the Llama-3.2 model. The agent provides a Compan
 
 ![Agent Response](docs/images/agent_response.jpg)
 
-### Documentation & Setup
-Quick access to setup instructions, documentation links, and current deployment status.
-
-![Documentation](docs/images/home_page_bottom.jpg)
-
 ## 🎯 Role Alignment: AI Operations Program Manager
 This project is specifically designed to demonstrate the core competencies of the **AI Operations Program Manager** role at Databricks, focusing on:
 
