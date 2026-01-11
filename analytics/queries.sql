@@ -41,14 +41,14 @@ ORDER BY total_tasks DESC;
 -- Daily Trend Analysis
 -- Track KPIs over time
 SELECT 
-    DATE(timestamp) as date,
+    CAST(timestamp AS DATE) as date,
     COUNT(*) as total_tasks,
     COUNT(DISTINCT user_id) as active_users,
     ROUND(AVG(CASE WHEN user_accepted THEN 1.0 ELSE 0.0 END) * 100, 1) as accuracy_pct,
     ROUND(AVG(user_rating), 2) as avg_satisfaction,
     ROUND(AVG(resolution_time_seconds), 2) as avg_resolution_time_sec
 FROM agent_runs
-GROUP BY DATE(timestamp)
+GROUP BY CAST(timestamp AS DATE)
 ORDER BY date;
 
 -- User Engagement Analysis

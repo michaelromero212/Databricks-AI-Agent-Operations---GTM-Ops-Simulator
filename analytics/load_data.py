@@ -107,13 +107,13 @@ class DataLoader:
         """Get daily trend data"""
         query = """
         SELECT 
-            DATE(timestamp) as date,
+            STRFTIME(timestamp, '%Y-%m-%d') as date,
             COUNT(*) as total_tasks,
             AVG(CASE WHEN user_accepted THEN 1.0 ELSE 0.0 END) * 100 as accuracy_pct,
             AVG(user_rating) as avg_satisfaction,
             COUNT(DISTINCT user_id) as active_users
         FROM agent_runs
-        GROUP BY DATE(timestamp)
+        GROUP BY STRFTIME(timestamp, '%Y-%m-%d')
         ORDER BY date
         """
         return self.execute_query(query)
