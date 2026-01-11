@@ -34,7 +34,7 @@
         <!-- Summary Metrics -->
         <div class="card">
             <div class="card-header">
-                <h2>Overall Performance Summary</h2>
+                <h2>📈 Overall Performance Summary</h2>
                 <p>Aggregated metrics across all agent runs</p>
             </div>
 
@@ -104,7 +104,7 @@
         {% if ab_comparison %}
         <div class="card">
             <div class="card-header">
-                <h2>A/B Test Comparison</h2>
+                <h2>🧪 A/B Test Comparison</h2>
                 <p>Agent A (baseline) vs Agent B (experimental)</p>
             </div>
 
@@ -143,8 +143,8 @@
                 </tbody>
             </table>
 
-            <div style="margin-top: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 4px;">
-                <p><strong>Decision:</strong> Continue with Agent A (see experiments/ab_test.md for full analysis)</p>
+            <div class="decision-box success">
+                <p><strong>✅ Decision:</strong> Continue with Agent A (see experiments/ab_test.md for full analysis)</p>
             </div>
         </div>
         {% endif %}
@@ -153,7 +153,7 @@
         {% if by_task %}
         <div class="card">
             <div class="card-header">
-                <h2>Performance by Task Type</h2>
+                <h2>📋 Performance by Task Type</h2>
                 <p>Metrics breakdown by operation type</p>
             </div>
 
@@ -190,7 +190,7 @@
         <!-- GTM Analysis: Performance by Lead Source -->
         {% if by_source %}
         <div class="card">
-            <div class="card-header" style="border-left: 4px solid #0d6efd;">
+            <div class="card-header">
                 <h2>🎯 GTM Analysis: Performance by Lead Source</h2>
                 <p>Identifying which channels produce the most reliable AI outcomes</p>
             </div>
@@ -225,7 +225,7 @@
         {% if trends %}
         <div class="card">
             <div class="card-header">
-                <h2>Daily Trends</h2>
+                <h2>📅 Daily Trends</h2>
                 <p>Time-series performance metrics</p>
             </div>
 
