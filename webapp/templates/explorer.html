@@ -1,0 +1,208 @@
+{% extends "layout.html" %}
+
+{% block title %}SQL Explorer - GTM Ops{% endblock %}
+{% block page_title %}SQL Explorer{% endblock %}
+{% block page_subtitle %}Query agent run data directly{% endblock %}
+
+{% set active_page = 'explorer' %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>🔍 Interactive SQL Console</h2>
+        <p>Run queries against the agent_runs table</p>
+    </div>
+    <div class="card-body">
+        <div class="query-presets">
+            <button class="btn btn-outline btn-sm" onclick="setQuery('summary')">📊 Summary Stats</button>
+            <button class="btn btn-outline btn-sm" onclick="setQuery('by_source')">📈 By Lead Source</button>
+            <button class="btn btn-outline btn-sm" onclick="setQuery('errors')">⚠️ Error Analysis</button>
+            <button class="btn btn-outline btn-sm" onclick="setQuery('ab_test')">🧪 A/B Comparison</button>
+            <button class="btn btn-outline btn-sm" onclick="setQuery('recent')">🕐 Recent Runs</button>
+        </div>
+
+        <form method="POST" action="/explorer">
+            <div class="form-group">
+                <label class="form-label">SQL Query</label>
+                <textarea name="query" id="sqlQuery" class="sql-editor"
+                    placeholder="SELECT * FROM agent_runs LIMIT 10">{{ query if query else 'SELECT * FROM agent_runs LIMIT 10' }}</textarea>
+            </div>
+            <button type="submit" class="btn btn-accent">
+                ▶️ Run Query
+            </button>
+        </form>
+    </div>
+</div>
+
+{% if results %}
+<div class="card">
+    <div class="card-header">
+        <h2>📋 Results</h2>
+        <p>{{ results|length }} rows returned</p>
+    </div>
+    <div class="card-body results-table" style="padding: 0; overflow-x: auto;">
+        <table>
+            <thead>
+                <tr>
+                    {% for col in columns %}
+                    <th>{{ col }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in results %}
+                <tr>
+                    {% for col in columns %}
+                    <td>{{ row[col] if row[col] is not none else '-' }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+{% if error %}
+<div class="alert alert-danger">
+    <strong>Query Error:</strong> {{ error }}
+</div>
+{% endif %}
+
+<div class="card">
+    <div class="card-header">
+        <h2>📖 Schema Reference</h2>
+        <p>Available columns in agent_runs</p>
+    </div>
+    <div class="card-body" style="padding: 0;">
+        <table>
+            <thead>
+                <tr>
+                    <th>Column</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>run_id</code></td>
+                    <td>STRING</td>
+                    <td>Unique run identifier</td>
+                </tr>
+                <tr>
+                    <td><code>timestamp</code></td>
+                    <td>TIMESTAMP</td>
+                    <td>When the run occurred</td>
+                </tr>
+                <tr>
+                    <td><code>user_id</code></td>
+                    <td>STRING</td>
+                    <td>User who triggered the run</td>
+                </tr>
+                <tr>
+                    <td><code>task_type</code></td>
+                    <td>STRING</td>
+                    <td>lead_summary, follow_up, risk_analysis, data_hygiene</td>
+                </tr>
+                <tr>
+                    <td><code>agent_version</code></td>
+                    <td>STRING</td>
+                    <td>A or B (for A/B testing)</td>
+                </tr>
+                <tr>
+                    <td><code>resolution_time_seconds</code></td>
+                    <td>FLOAT</td>
+                    <td>Time to generate response</td>
+                </tr>
+                <tr>
+                    <td><code>user_accepted</code></td>
+                    <td>BOOLEAN</td>
+                    <td>Whether user accepted the response</td>
+                </tr>
+                <tr>
+                    <td><code>user_rating</code></td>
+                    <td>INTEGER</td>
+                    <td>1-5 satisfaction rating</td>
+                </tr>
+                <tr>
+                    <td><code>abstained</code></td>
+                    <td>BOOLEAN</td>
+                    <td>Whether agent abstained (escalated)</td>
+                </tr>
+                <tr>
+                    <td><code>error_occurred</code></td>
+                    <td>BOOLEAN</td>
+                    <td>Whether an error occurred</td>
+                </tr>
+                <tr>
+                    <td><code>lead_source</code></td>
+                    <td>STRING</td>
+                    <td>GTM lead source channel</td>
+                </tr>
+                <tr>
+                    <td><code>crm_stage</code></td>
+                    <td>STRING</td>
+                    <td>CRM opportunity stage</td>
+                </tr>
+                <tr>
+                    <td><code>opportunity_value</code></td>
+                    <td>INTEGER</td>
+                    <td>Deal value in USD</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const presetQueries = {
+        summary: `SELECT 
+    COUNT(*) as total_runs,
+    ROUND(AVG(CASE WHEN user_accepted THEN 1.0 ELSE 0.0 END) * 100, 1) as accuracy_pct,
+    ROUND(AVG(user_rating), 2) as avg_satisfaction,
+    ROUND(AVG(resolution_time_seconds), 2) as avg_time_seconds
+FROM agent_runs`,
+
+        by_source: `SELECT 
+    lead_source,
+    COUNT(*) as volume,
+    ROUND(AVG(CASE WHEN user_accepted THEN 1.0 ELSE 0.0 END) * 100, 1) as accuracy_pct,
+    ROUND(AVG(user_rating), 2) as satisfaction
+FROM agent_runs
+GROUP BY lead_source
+ORDER BY accuracy_pct DESC`,
+
+        errors: `SELECT 
+    task_type,
+    COUNT(*) as error_count,
+    ROUND(AVG(resolution_time_seconds), 2) as avg_time
+FROM agent_runs
+WHERE error_occurred = true OR user_accepted = false
+GROUP BY task_type
+ORDER BY error_count DESC`,
+
+        ab_test: `SELECT 
+    agent_version,
+    COUNT(*) as sample_size,
+    ROUND(AVG(CASE WHEN user_accepted THEN 1.0 ELSE 0.0 END) * 100, 1) as accuracy_pct,
+    ROUND(AVG(user_rating), 2) as satisfaction,
+    ROUND(AVG(resolution_time_seconds), 2) as avg_time
+FROM agent_runs
+GROUP BY agent_version`,
+
+        recent: `SELECT 
+    run_id, timestamp, user_id, task_type, 
+    CASE WHEN user_accepted THEN 'Accepted' ELSE 'Rejected' END as outcome,
+    resolution_time_seconds
+FROM agent_runs
+ORDER BY timestamp DESC
+LIMIT 10`
+    };
+
+    function setQuery(preset) {
+        document.getElementById('sqlQuery').value = presetQueries[preset];
+    }
+</script>
+{% endblock %}

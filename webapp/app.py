@@ -1,5 +1,6 @@
 """
 FastAPI Web Application for AI Agent Operations Dashboard
+Premium GTM Ops Platform with live data and SQL Explorer
 """
 from fastapi import FastAPI, Request, Form, UploadFile, File
 from fastapi.responses import HTMLResponse, RedirectResponse
@@ -8,6 +9,7 @@ from fastapi.templating import Jinja2Templates
 from pathlib import Path
 import sys
 import csv
+import uuid
 from datetime import datetime
 from typing import Optional
 
@@ -18,7 +20,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "analytics"))
 from agent import GTMAgent
 from load_data import DataLoader
 
-app = FastAPI(title="AI Agent Operations Dashboard")
+app = FastAPI(title="GTM Ops Platform")
 
 # Mount static files and templates
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -27,8 +29,39 @@ templates = Jinja2Templates(directory="templates")
 # Initialize agent
 agent = GTMAgent()
 
-# Initialize data loader
+# Data file path
 data_file = Path(__file__).parent.parent / "data" / "sample_agent_runs.csv"
+
+
+def log_agent_run(task_type: str, user_id: str, resolution_time: float, 
+                  abstained: bool, error: bool, user_accepted: bool = True, 
+                  user_rating: int = 4):
+    """Append a new agent run to the CSV file for live updates"""
+    run_id = f"WEB{datetime.now().strftime('%Y%m%d%H%M%S')}"
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    
+    new_row = {
+        'run_id': run_id,
+        'timestamp': timestamp,
+        'user_id': user_id,
+        'task_type': task_type,
+        'agent_version': 'A',
+        'resolution_time_seconds': round(resolution_time, 2),
+        'user_accepted': user_accepted,
+        'user_rating': user_rating,
+        'abstained': abstained,
+        'error_occurred': error,
+        'lead_source': 'Web Upload',
+        'crm_stage': 'Discovery',
+        'opportunity_value': 0
+    }
+    
+    # Append to CSV
+    with open(data_file, 'a', newline='') as f:
+        writer = csv.DictWriter(f, fieldnames=new_row.keys())
+        writer.writerow(new_row)
+    
+    return run_id
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -39,10 +72,8 @@ async def index(request: Request):
     try:
         loader.load_csv_to_db(str(data_file))
         
-        # Get summary stats for quick insights
         summary_df = loader.get_summary_stats()
         
-        # Get top performing and underperforming areas
         by_source_query = """
         SELECT lead_source, 
                COUNT(*) as volume, 
@@ -53,7 +84,6 @@ async def index(request: Request):
         """
         by_source_df = loader.execute_query(by_source_query)
         
-        # Recent activity
         recent_query = """
         SELECT task_type, user_id, 
                CASE WHEN user_accepted THEN 'Accepted' ELSE 'Rejected' END as outcome,
@@ -65,7 +95,6 @@ async def index(request: Request):
         """
         recent_df = loader.execute_query(recent_query)
         
-        # A/B Test comparison
         ab_df = loader.get_metrics_by_version()
         
         loader.close()
@@ -89,22 +118,20 @@ async def index(request: Request):
 
 @app.get("/dashboard", response_class=HTMLResponse)
 async def dashboard(request: Request):
-    """KPI Dashboard"""
-    # Load data
+    """KPI Dashboard with interactive charts"""
     loader = DataLoader(":memory:")
     
     try:
         loader.load_csv_to_db(str(data_file))
         
-        # Get summary and other metrics
         summary_df = loader.get_summary_stats()
         by_version_df = loader.get_metrics_by_version()
         by_task_df = loader.get_metrics_by_task_type()
         trends_df = loader.get_daily_trends()
         
-        # GTM Specific: Performance by Lead Source
         by_source_query = """
-        SELECT lead_source, COUNT(*) as volume, ROUND(AVG(CASE WHEN user_accepted THEN 1.0 ELSE 0.0 END) * 100, 1) as accuracy 
+        SELECT lead_source, COUNT(*) as volume, 
+               ROUND(AVG(CASE WHEN user_accepted THEN 1.0 ELSE 0.0 END) * 100, 1) as accuracy 
         FROM agent_runs GROUP BY lead_source ORDER BY accuracy DESC
         """
         by_source_df = loader.execute_query(by_source_query)
@@ -140,13 +167,12 @@ async def upload_file(
     file: UploadFile = File(...),
     task_type: str = Form(...)
 ):
-    """Handle file upload and process with agent"""
+    """Handle file upload, process with agent, and log to database"""
     try:
-        # Read uploaded file
         contents = await file.read()
         text_content = contents.decode('utf-8')
         
-        # Save to uploaded_inputs
+        # Save uploaded file
         upload_dir = Path(__file__).parent.parent / "data" / "uploaded_inputs"
         upload_dir.mkdir(parents=True, exist_ok=True)
         
@@ -156,15 +182,24 @@ async def upload_file(
         with open(saved_file, 'wb') as f:
             f.write(contents)
         
-        # Process with agent (simple demonstration)
+        # Process with agent
         result = agent.process_task(
             task_type=task_type,
             user_id="web_user",
             lead_name="Uploaded Lead",
             company_name="From File",
             industry="Unknown",
-            source="File Upload",
-            additional_context=text_content[:500]  # First 500 chars
+            source="Web Upload",
+            additional_context=text_content[:1000]
+        )
+        
+        # LOG THE RUN TO CSV (Live Loop!)
+        log_agent_run(
+            task_type=task_type,
+            user_id="web_user",
+            resolution_time=result['resolution_time_seconds'],
+            abstained=result['abstained'],
+            error=False
         )
         
         return templates.TemplateResponse("upload.html", {
@@ -177,8 +212,53 @@ async def upload_file(
         })
         
     except Exception as e:
-        return templates. TemplateResponse("upload.html", {
+        return templates.TemplateResponse("upload.html", {
             "request": request,
+            "error": str(e)
+        })
+
+
+@app.get("/explorer", response_class=HTMLResponse)
+async def explorer_page(request: Request):
+    """SQL Explorer page"""
+    return templates.TemplateResponse("explorer.html", {"request": request})
+
+
+@app.post("/explorer", response_class=HTMLResponse)
+async def execute_query(request: Request, query: str = Form(...)):
+    """Execute SQL query and return results"""
+    loader = DataLoader(":memory:")
+    
+    try:
+        loader.load_csv_to_db(str(data_file))
+        
+        # Basic SQL injection prevention - only allow SELECT
+        clean_query = query.strip()
+        if not clean_query.upper().startswith('SELECT'):
+            raise ValueError("Only SELECT queries are allowed")
+        
+        # Block dangerous keywords
+        dangerous = ['DROP', 'DELETE', 'INSERT', 'UPDATE', 'CREATE', 'ALTER', 'TRUNCATE']
+        for keyword in dangerous:
+            if keyword in clean_query.upper():
+                raise ValueError(f"Unsafe keyword detected: {keyword}")
+        
+        result_df = loader.execute_query(clean_query)
+        loader.close()
+        
+        return templates.TemplateResponse("explorer.html", {
+            "request": request,
+            "query": query,
+            "columns": list(result_df.columns),
+            "results": result_df.to_dict('records'),
+            "error": None
+        })
+        
+    except Exception as e:
+        loader.close()
+        return templates.TemplateResponse("explorer.html", {
+            "request": request,
+            "query": query,
             "error": str(e)
         })
 
@@ -204,7 +284,6 @@ async def agent_query(
 ):
     """Process agent query"""
     try:
-        # Build kwargs based on task type
         kwargs = {}
         
         if task_type == "lead_summary":
@@ -232,11 +311,19 @@ async def agent_query(
                 "stakeholders": stakeholders or "Unknown"
             }
         
-        # Process with agent
         result = agent.process_task(
             task_type=task_type,
             user_id="web_user",
             **kwargs
+        )
+        
+        # Log the run
+        log_agent_run(
+            task_type=task_type,
+            user_id="web_user",
+            resolution_time=result['resolution_time_seconds'],
+            abstained=result['abstained'],
+            error=False
         )
         
         return {

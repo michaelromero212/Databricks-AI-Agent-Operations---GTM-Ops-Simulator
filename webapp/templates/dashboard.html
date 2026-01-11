@@ -1,217 +1,152 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "layout.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Agent KPI Dashboard</title>
-    <link rel="stylesheet" href="/static/styles.css">
-</head>
+{% block title %}Dashboard - GTM Ops{% endblock %}
+{% block page_title %}KPI Dashboard{% endblock %}
+{% block page_subtitle %}Comprehensive performance analytics{% endblock %}
 
-<body>
-    <header>
-        <div class="container">
-            <h1>📊 AI Agent KPI Dashboard</h1>
-            <p>Real-time operational metrics and performance monitoring</p>
-        </div>
-    </header>
+{% set active_page = 'dashboard' %}
 
-    <nav>
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/dashboard" class="active">Dashboard</a></li>
-            <li><a href="/upload">Upload Data</a></li>
-        </ul>
-    </nav>
+{% block content %}
+{% if error %}
+<div class="alert alert-danger">
+    <strong>Error loading data:</strong> {{ error }}
+</div>
+{% else %}
 
-    <div class="container">
-        {% if error %}
-        <div class="alert alert-error">
-            <strong>Error loading dashboard:</strong> {{ error }}
-        </div>
-        {% else %}
-
-        <!-- Summary Metrics -->
-        <div class="card">
-            <div class="card-header">
-                <h2>📈 Overall Performance Summary</h2>
-                <p>Aggregated metrics across all agent runs</p>
+{% if summary %}
+<!-- North Star Metrics -->
+<div class="card">
+    <div class="card-header">
+        <h2>📈 Overall Performance</h2>
+        <p>Aggregated metrics across all agent runs</p>
+    </div>
+    <div class="card-body">
+        <div class="metrics-grid">
+            <div class="metric-card {% if summary.acceptance_rate >= 85 %}success{% else %}warning{% endif %}">
+                <div class="metric-label">Task Accuracy</div>
+                <div class="metric-value">{{ "%.1f"|format(summary.acceptance_rate) }}<span>%</span></div>
+                <div class="metric-change">Target: ≥85%</div>
             </div>
 
-            {% if summary %}
-            <div class="metrics-grid">
-                <div
-                    class="metric-card {% if summary.acceptance_rate >= 85 %}success{% elif summary.acceptance_rate >= 80 %}warning{% else %}danger{% endif %}">
-                    <div class="metric-label">Task Accuracy</div>
-                    <div class="metric-value">{{ "%.1f"|format(summary.acceptance_rate) }}<span
-                            class="metric-unit">%</span></div>
-                    <p style="margin-top: 0.5rem; font-size: 0.85rem; color: #6c757d;">Target: ≥85%</p>
-                </div>
-
-                <div
-                    class="metric-card {% if summary.avg_rating >= 4.0 %}success{% elif summary.avg_rating >= 3.5 %}warning{% else %}danger{% endif %}">
-                    <div class="metric-label">User Satisfaction</div>
-                    <div class="metric-value">{{ "%.2f"|format(summary.avg_rating) }}<span class="metric-unit">/
-                            5</span></div>
-                    <p style="margin-top: 0.5rem; font-size: 0.85rem; color: #6c757d;">Target: ≥4.0</p>
-                </div>
-
-                <div
-                    class="metric-card {% if summary.avg_resolution_time <= 5 %}success{% elif summary.avg_resolution_time <= 7 %}warning{% else %}danger{% endif %}">
-                    <div class="metric-label">Avg Resolution Time</div>
-                    <div class="metric-value">{{ "%.2f"|format(summary.avg_resolution_time) }}<span
-                            class="metric-unit">s</span></div>
-                    <p style="margin-top: 0.5rem; font-size: 0.85rem; color: #6c757d;">Target: ≤5s</p>
-                </div>
-
-                <div
-                    class="metric-card {% if summary.error_rate <= 2 %}success{% elif summary.error_rate <= 5 %}warning{% else %}danger{% endif %}">
-                    <div class="metric-label">Error Rate</div>
-                    <div class="metric-value">{{ "%.1f"|format(summary.error_rate) }}<span class="metric-unit">%</span>
-                    </div>
-                    <p style="margin-top: 0.5rem; font-size: 0.85rem; color: #6c757d;">Target: ≤2%</p>
-                </div>
-
-                <div class="metric-card">
-                    <div class="metric-label">Total Runs</div>
-                    <div class="metric-value">{{ summary.total_runs }}</div>
-                    <p style="margin-top: 0.5rem; font-size: 0.85rem; color: #6c757d;">All task types</p>
-                </div>
-
-                <div class="metric-card">
-                    <div class="metric-label">Unique Users</div>
-                    <div class="metric-value">{{ summary.unique_users }}</div>
-                    <p style="margin-top: 0.5rem; font-size: 0.85rem; color: #6c757d;">Active users</p>
-                </div>
-
-                <div class="metric-card">
-                    <div class="metric-label">Abstention Rate</div>
-                    <div class="metric-value">{{ "%.1f"|format(summary.abstention_rate) }}<span
-                            class="metric-unit">%</span></div>
-                    <p style="margin-top: 0.5rem; font-size: 0.85rem; color: #6c757d;">Target: 5-15%</p>
-                </div>
-
-                <div class="metric-card">
-                    <div class="metric-label">Task Types</div>
-                    <div class="metric-value">{{ summary.task_types }}</div>
-                    <p style="margin-top: 0.5rem; font-size: 0.85rem; color: #6c757d;">Supported types</p>
-                </div>
-            </div>
-            {% endif %}
-        </div>
-
-        <!-- A/B Test Comparison -->
-        {% if ab_comparison %}
-        <div class="card">
-            <div class="card-header">
-                <h2>🧪 A/B Test Comparison</h2>
-                <p>Agent A (baseline) vs Agent B (experimental)</p>
+            <div class="metric-card {% if summary.avg_rating >= 4.0 %}success{% else %}warning{% endif %}">
+                <div class="metric-label">User Satisfaction</div>
+                <div class="metric-value">{{ "%.2f"|format(summary.avg_rating) }}<span>/5</span></div>
+                <div class="metric-change">Target: ≥4.0</div>
             </div>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Agent Version</th>
-                        <th>Sample Size</th>
-                        <th>Accuracy (%)</th>
-                        <th>Satisfaction</th>
-                        <th>Avg Time (s)</th>
-                        <th>Error Rate (%)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for row in ab_comparison %}
-                    <tr>
-                        <td><strong>Agent {{ row.agent_version }}</strong></td>
-                        <td>{{ row.total_tasks }}</td>
-                        <td>
-                            <span
-                                class="badge {% if row.accuracy_pct >= 85 %}badge-success{% elif row.accuracy_pct >= 80 %}badge-warning{% else %}badge-danger{% endif %}">
-                                {{ "%.1f"|format(row.accuracy_pct) }}%
-                            </span>
-                        </td>
-                        <td>{{ "%.2f"|format(row.avg_satisfaction) }}</td>
-                        <td>{{ "%.2f"|format(row.avg_resolution_time) }}</td>
-                        <td>
-                            <span
-                                class="badge {% if row.error_rate <= 2 %}badge-success{% else %}badge-warning{% endif %}">
-                                {{ "%.1f"|format(row.error_rate) }}%
-                            </span>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div class="metric-card {% if summary.avg_resolution_time <= 5 %}success{% else %}warning{% endif %}">
+                <div class="metric-label">Avg Resolution Time</div>
+                <div class="metric-value">{{ "%.2f"|format(summary.avg_resolution_time) }}<span>s</span></div>
+                <div class="metric-change">Target: ≤5s</div>
+            </div>
 
-            <div class="decision-box success">
-                <p><strong>✅ Decision:</strong> Continue with Agent A (see experiments/ab_test.md for full analysis)</p>
+            <div class="metric-card {% if summary.error_rate <= 2 %}success{% else %}danger{% endif %}">
+                <div class="metric-label">Error Rate</div>
+                <div class="metric-value">{{ "%.1f"|format(summary.error_rate) }}<span>%</span></div>
+                <div class="metric-change">Target: ≤2%</div>
             </div>
         </div>
-        {% endif %}
+    </div>
+</div>
 
-        <!-- Performance by Task Type -->
-        {% if by_task %}
-        <div class="card">
-            <div class="card-header">
-                <h2>📋 Performance by Task Type</h2>
-                <p>Metrics breakdown by operation type</p>
+<!-- Charts Row -->
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+    <!-- A/B Test Chart -->
+    {% if ab_comparison %}
+    <div class="card">
+        <div class="card-header">
+            <h2>🧪 A/B Test Comparison</h2>
+            <p>Agent A (baseline) vs Agent B (experimental)</p>
+        </div>
+        <div class="card-body">
+            <div class="chart-container">
+                <canvas id="abCompareChart"></canvas>
             </div>
+            <div class="decision-box success" style="margin-top: 1rem;">
+                ✅ <strong>Decision:</strong> Continue with Agent A (see experiments/ab_test.md)
+            </div>
+        </div>
+    </div>
+    {% endif %}
 
+    <!-- Task Type Breakdown -->
+    {% if by_task %}
+    <div class="card">
+        <div class="card-header">
+            <h2>📋 Performance by Task Type</h2>
+            <p>Metrics breakdown by operation type</p>
+        </div>
+        <div class="card-body">
+            <div class="chart-container">
+                <canvas id="taskTypeChart"></canvas>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Tables Row -->
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem;">
+    <!-- By Task Type Table -->
+    {% if by_task %}
+    <div class="card">
+        <div class="card-header">
+            <h2>📊 Task Type Details</h2>
+        </div>
+        <div class="card-body" style="padding: 0;">
             <table>
                 <thead>
                     <tr>
                         <th>Task Type</th>
-                        <th>Total Tasks</th>
-                        <th>Accuracy (%)</th>
+                        <th>Volume</th>
+                        <th>Accuracy</th>
                         <th>Satisfaction</th>
-                        <th>Avg Time (s)</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for row in by_task %}
+                    {% for task in by_task %}
                     <tr>
-                        <td><strong>{{ row.task_type }}</strong></td>
-                        <td>{{ row.total_tasks }}</td>
+                        <td><code>{{ task.task_type }}</code></td>
+                        <td>{{ task.total_tasks }}</td>
                         <td>
                             <span
-                                class="badge {% if row.accuracy_pct >= 85 %}badge-success{% elif row.accuracy_pct >= 80 %}badge-warning{% else %}badge-danger{% endif %}">
-                                {{ "%.1f"|format(row.accuracy_pct) }}%
+                                class="badge {% if task.accuracy_pct >= 90 %}badge-success{% elif task.accuracy_pct >= 80 %}badge-warning{% else %}badge-danger{% endif %}">
+                                {{ "%.1f"|format(task.accuracy_pct) }}%
                             </span>
                         </td>
-                        <td>{{ "%.2f"|format(row.avg_satisfaction) }}</td>
-                        <td>{{ "%.2f"|format(row.avg_resolution_time) }}</td>
+                        <td>{{ "%.2f"|format(task.avg_satisfaction) }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
-        {% endif %}
+    </div>
+    {% endif %}
 
-        <!-- GTM Analysis: Performance by Lead Source -->
-        {% if by_source %}
-        <div class="card">
-            <div class="card-header">
-                <h2>🎯 GTM Analysis: Performance by Lead Source</h2>
-                <p>Identifying which channels produce the most reliable AI outcomes</p>
-            </div>
-
+    <!-- By Lead Source Table -->
+    {% if by_source %}
+    <div class="card">
+        <div class="card-header">
+            <h2>🎯 GTM Analysis: By Lead Source</h2>
+        </div>
+        <div class="card-body" style="padding: 0;">
             <table>
                 <thead>
                     <tr>
                         <th>Lead Source</th>
                         <th>Volume</th>
-                        <th>Accuracy (%)</th>
+                        <th>Accuracy</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for row in by_source %}
+                    {% for source in by_source %}
                     <tr>
-                        <td><strong>{{ row.lead_source }}</strong></td>
-                        <td>{{ row.volume }}</td>
+                        <td>{{ source.lead_source }}</td>
+                        <td>{{ source.volume }}</td>
                         <td>
                             <span
-                                class="badge {% if row.accuracy >= 90 %}badge-success{% elif row.accuracy >= 80 %}badge-warning{% else %}badge-danger{% endif %}">
-                                {{ row.accuracy }}%
+                                class="badge {% if source.accuracy >= 90 %}badge-success{% elif source.accuracy >= 80 %}badge-warning{% else %}badge-danger{% endif %}">
+                                {{ source.accuracy }}%
                             </span>
                         </td>
                     </tr>
@@ -219,93 +154,125 @@
                 </tbody>
             </table>
         </div>
-        {% endif %}
-
-        <!-- Daily Trends -->
-        {% if trends %}
-        <div class="card">
-            <div class="card-header">
-                <h2>📅 Daily Trends</h2>
-                <p>Time-series performance metrics</p>
-            </div>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Total Tasks</th>
-                        <th>Active Users</th>
-                        <th>Accuracy (%)</th>
-                        <th>Satisfaction</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for row in trends %}
-                    <tr>
-                        <td>{{ row.date }}</td>
-                        <td>{{ row.total_tasks }}</td>
-                        <td>{{ row.active_users }}</td>
-                        <td>
-                            <span
-                                class="badge {% if row.accuracy_pct >= 85 %}badge-success{% elif row.accuracy_pct >= 80 %}badge-warning{% else %}badge-danger{% endif %}">
-                                {{ "%.1f"|format(row.accuracy_pct) }}%
-                            </span>
-                        </td>
-                        <td>{{ "%.2f"|format(row.avg_satisfaction) }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% endif %}
-
-        <div class="card">
-            <div class="card-header">
-                <h2>💡 What's Next?</h2>
-                <p>Actions you can take based on these metrics</p>
-            </div>
-            <div
-                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
-                <div class="metric-card success">
-                    <div class="metric-label">Test the Agent</div>
-                    <p style="margin-top: 0.5rem; font-size: 0.9rem; color: #6c757d;">
-                        Upload sample lead data and see AI-generated analysis
-                    </p>
-                    <a href="/upload" class="btn btn-primary" style="margin-top: 0.75rem; display: inline-block;">Try
-                        Agent →</a>
-                </div>
-
-                <div class="metric-card">
-                    <div class="metric-label">Review Documentation</div>
-                    <p style="margin-top: 0.5rem; font-size: 0.9rem; color: #6c757d;">
-                        Business intent, KPIs, rollout plan, and enablement guides
-                    </p>
-                    <a href="/" class="btn btn-primary" style="margin-top: 0.75rem; display: inline-block;">View Docs
-                        →</a>
-                </div>
-
-                <div class="metric-card">
-                    <div class="metric-label">Investigate Low Performers</div>
-                    <p style="margin-top: 0.5rem; font-size: 0.9rem; color: #6c757d;">
-                        Focus on task types or lead sources with &lt;85% accuracy
-                    </p>
-                </div>
-
-                <div class="metric-card success">
-                    <div class="metric-label">Share with Stakeholders</div>
-                    <p style="margin-top: 0.5rem; font-size: 0.9rem; color: #6c757d;">
-                        Use these metrics for your Weekly Business Review
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        {% endif %}
     </div>
+    {% endif %}
+</div>
 
-    <footer>
-        <p>&copy; 2026 Databricks AI Agent Operations Simulator</p>
-    </footer>
-</body>
+<!-- Daily Trends -->
+{% if trends %}
+<div class="card" style="margin-top: 1.5rem;">
+    <div class="card-header">
+        <h2>📅 Daily Trends</h2>
+        <p>Time-series performance metrics</p>
+    </div>
+    <div class="card-body">
+        <div class="chart-container">
+            <canvas id="trendsChart"></canvas>
+        </div>
+    </div>
+</div>
+{% endif %}
 
-</html>
+{% endif %}
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+    {% if ab_comparison %}
+    // A/B Comparison Chart
+    new Chart(document.getElementById('abCompareChart'), {
+        type: 'bar',
+        data: {
+            labels: ['Accuracy %', 'Satisfaction', 'Avg Time (s)', 'Error Rate %'],
+            datasets: [
+                {
+                    label: 'Agent A',
+                    data: [{{ ab_comparison[0].accuracy_pct }}, {{ ab_comparison[0].avg_satisfaction }}, {{ ab_comparison[0].avg_resolution_time }}, {{ ab_comparison[0].error_rate }}],
+        backgroundColor: '#10b981',
+        borderRadius: 4
+            },
+        {% if ab_comparison | length > 1 %}
+    {
+        label: 'Agent B',
+            data: [{{ ab_comparison[1].accuracy_pct }}, { { ab_comparison[1].avg_satisfaction } }, { { ab_comparison[1].avg_resolution_time } }, { { ab_comparison[1].error_rate } }],
+    backgroundColor: '#f59e0b',
+        borderRadius: 4
+            }
+    {% endif %}
+        ]
+    },
+    options: {
+        responsive: true,
+            maintainAspectRatio: false,
+                plugins: { legend: { position: 'top' } },
+        scales: {
+            y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
+            x: { grid: { display: false } }
+        }
+    }
+});
+    {% endif %}
+
+    {% if by_task %}
+    // Task Type Chart
+    new Chart(document.getElementById('taskTypeChart'), {
+        type: 'doughnut',
+        data: {
+            labels: [{% for t in by_task %}'{{ t.task_type }}'{% if not loop.last %}, {% endif %}{% endfor %}],
+        datasets: [{
+            data: [{% for t in by_task %}{{ t.total_tasks }}{% if not loop.last %}, {% endif %} {% endfor %}],
+    backgroundColor: ['#1b3a4b', '#ff6f00', '#10b981', '#3b82f6', '#8b5cf6'],
+        borderWidth: 0
+        }]
+    },
+    options: {
+        responsive: true,
+            maintainAspectRatio: false,
+                plugins: {
+            legend: { position: 'right' }
+        }
+    }
+});
+    {% endif %}
+
+    {% if trends %}
+    // Trends Chart
+    new Chart(document.getElementById('trendsChart'), {
+        type: 'line',
+        data: {
+            labels: [{% for t in trends %}'{{ t.date }}'{% if not loop.last %}, {% endif %}{% endfor %}],
+        datasets: [
+        {
+            label: 'Accuracy %',
+            data: [{% for t in trends %}{{ "%.1f"| format(t.accuracy_pct) }}{% if not loop.last %}, {% endif %} {% endfor %}],
+    borderColor: '#10b981',
+        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            fill: true,
+                tension: 0.3
+            },
+    {
+        label: 'Tasks',
+            data: [{% for t in trends %} { { t.total_tasks } } {% if not loop.last %}, {% endif %} {% endfor %}],
+    borderColor: '#1b3a4b',
+        backgroundColor: 'transparent',
+            tension: 0.3,
+                yAxisID: 'y1'
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+            maintainAspectRatio: false,
+                interaction: { intersect: false, mode: 'index' },
+        plugins: { legend: { position: 'top' } },
+        scales: {
+            y: { beginAtZero: true, max: 100, position: 'left', grid: { color: '#f1f5f9' } },
+            y1: { beginAtZero: true, position: 'right', grid: { display: false } },
+            x: { grid: { display: false } }
+        }
+    }
+});
+    {% endif %}
+</script>
+{% endblock %}

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AI Agent Operations{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    {% block head %}{% endblock %}
+</head>
+
+<body class="app-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <span class="brand-icon">🤖</span>
+            <span class="brand-text">GTM Ops</span>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="/" class="nav-item {% if active_page == 'home' %}active{% endif %}">
+                <span class="nav-icon">📊</span>
+                <span class="nav-label">Overview</span>
+            </a>
+            <a href="/dashboard" class="nav-item {% if active_page == 'dashboard' %}active{% endif %}">
+                <span class="nav-icon">📈</span>
+                <span class="nav-label">Dashboard</span>
+            </a>
+            <a href="/upload" class="nav-item {% if active_page == 'upload' %}active{% endif %}">
+                <span class="nav-icon">🧪</span>
+                <span class="nav-label">Test Agent</span>
+            </a>
+            <a href="/explorer" class="nav-item {% if active_page == 'explorer' %}active{% endif %}">
+                <span class="nav-icon">🔍</span>
+                <span class="nav-label">SQL Explorer</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="status-indicator">
+                <span class="status-dot active"></span>
+                <span class="status-text">Agent Online</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="top-bar">
+            <div class="page-title">
+                <h1>{% block page_title %}AI Agent Operations{% endblock %}</h1>
+                <p class="page-subtitle">{% block page_subtitle %}GTM Sales Intelligence Platform{% endblock %}</p>
+            </div>
+            <div class="top-bar-actions">
+                {% block header_actions %}{% endblock %}
+            </div>
+        </header>
+
+        <div class="content-area">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>

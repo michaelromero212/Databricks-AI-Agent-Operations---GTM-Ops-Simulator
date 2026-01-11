@@ -1,128 +1,142 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "layout.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Agent - Upload & Test</title>
-    <link rel="stylesheet" href="/static/styles.css">
-</head>
+{% block title %}Test Agent - GTM Ops{% endblock %}
+{% block page_title %}Test Agent{% endblock %}
+{% block page_subtitle %}Upload data for AI-powered analysis{% endblock %}
 
-<body>
-    <header>
-        <div class="container">
-            <h1>📤 Upload Data & Test Agent</h1>
-            <p>Test the AI agent with your GTM data</p>
-        </div>
-    </header>
+{% set active_page = 'upload' %}
 
-    <nav>
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/dashboard">Dashboard</a></li>
-            <li><a href="/upload" class="active">Upload Data</a></li>
-        </ul>
-    </nav>
+{% block content %}
+{% if success %}
+<div class="alert alert-success">
+    <div>
+        <strong>✅ Success!</strong> File "{{ filename }}" processed successfully<br>
+        <span style="font-size: 0.875rem;">Confidence: {{ confidence }} | Time: {{ "%.2f"|format(resolution_time)
+            }}s</span>
+    </div>
+</div>
 
-    <div class="container">
-        {% if success %}
-        <div class="alert alert-success">
-            <p><strong>✅ Success!</strong> File "{{ filename }}" processed successfully</p>
-            <p style="margin-top: 0.5rem;"><strong>Confidence:</strong> {{ confidence }} | <strong>Time:</strong> {{
-                resolution_time }}s</p>
-        </div>
+<div class="card">
+    <div class="card-header">
+        <h2>🤖 Agent Response</h2>
+        <p>AI-generated analysis</p>
+    </div>
+    <div class="card-body">
+        <div class="agent-response">
+            <div class="response-content">{{ result }}</div>
 
-        <div class="card">
-            <div class="card-header">
-                <h2>Agent Response</h2>
+            <div class="feedback-buttons">
+                <span style="font-size: 0.875rem; color: var(--gray-500); margin-right: 0.5rem;">Was this
+                    helpful?</span>
+                <button class="feedback-btn" onclick="submitFeedback(true)" title="Yes, helpful">👍</button>
+                <button class="feedback-btn" onclick="submitFeedback(false)" title="No, not helpful">👎</button>
             </div>
-            <div class="response-box">{{ result }}</div>
         </div>
-        {% endif %}
+    </div>
+</div>
+{% endif %}
 
-        {% if error %}
-        <div class="alert alert-error">
-            <strong>Error:</strong> {{ error }}
-        </div>
-        {% endif %}
+{% if error %}
+<div class="alert alert-danger">
+    <strong>Error:</strong> {{ error }}
+</div>
+{% endif %}
 
-        <div class="card">
-            <div class="card-header">
-                <h2>Upload File for Processing</h2>
-                <p>Upload lead data, deal notes, or sales inputs for agent analysis</p>
-            </div>
-
-            <form action="/upload" method="post" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label for="task_type">Task Type</label>
-                    <select id="task_type" name="task_type" required>
-                        <option value="lead_summary">Lead Summary</option>
-                        <option value="follow_up">Follow-Up Suggestion</option>
-                        <option value="risk_analysis">Risk Analysis</option>
-                        <option value="data_hygiene">Data Hygiene Check</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="file">Select File (CSV, TXT, or JSON)</label>
-                    <input type="file" id="file" name="file" accept=".csv,.txt,.json" required>
-                    <p style="margin-top: 0.5rem; font-size: 0.85rem; color: #6c757d;">
-                        Upload a file containing lead information, deal notes, or sales data
-                    </p>
-                </div>
-
-                <button type="submit" class="btn btn-primary">Upload & Process</button>
-            </form>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <h2>💡 Example Upload Content</h2>
+<div class="card">
+    <div class="card-header">
+        <h2>📤 Upload File for Processing</h2>
+        <p>Upload lead data, deal notes, or sales inputs for agent analysis</p>
+    </div>
+    <div class="card-body">
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label class="form-label">Task Type</label>
+                <select name="task_type" class="form-control" required>
+                    <option value="lead_summary">Lead Summary</option>
+                    <option value="follow_up">Follow-up Suggestions</option>
+                    <option value="risk_analysis">Risk Analysis</option>
+                    <option value="data_hygiene">Data Hygiene</option>
+                </select>
             </div>
 
-            <p style="margin-bottom: 1rem;">Sample content you can save as a .txt file and upload:</p>
+            <div class="form-group">
+                <label class="form-label">Select File (CSV, TXT, or JSON)</label>
+                <input type="file" name="file" class="form-control" accept=".csv,.txt,.json" required>
+            </div>
 
-            <pre style="background: #f8f9fa; padding: 1rem; border-radius: 4px; overflow-x: auto;">Lead Name: Sarah Chen
+            <button type="submit" class="btn btn-accent btn-lg">
+                🚀 Upload & Process
+            </button>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h2>💡 Example Input</h2>
+        <p>Sample content you can save as a .txt file and upload</p>
+    </div>
+    <div class="card-body">
+        <pre
+            style="background: var(--gray-50); padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.875rem;">Lead Name: Sarah Chen
 Company: TechVision Analytics
 Industry: SaaS / Data Analytics
 Source: Webinar Registration - "Modern Data Stack 2026"
-Context: 
+Context:
 - Downloaded lakehouse architecture whitepaper
 - Company size: 200 employees
 - Current stack: Snowflake, dbt, Fivetran
 - Pain points mentioned: High costs, slow ELT, limited ML capabilities
 - Next step: Discovery call scheduled for next week</pre>
+    </div>
+</div>
 
-            <p style="margin-top: 1rem; margin-bottom: 1rem;">Or for a follow-up scenario:</p>
-
-            <pre style="background: #f8f9fa; padding: 1rem; border-radius: 4px; overflow-x: auto;">Customer: Acme Financial Services
-Last Interaction: Product demo on 2026-01-10
-Interaction Type: Technical Deep Dive
-Summary: VP Engineering was very engaged during lakehouse demo. 
-         Asked detailed questions about Delta Lake, Unity Catalog, and MLflow integration.
-         Mentioned current challenges with data silos and compliance requirements.
-         Interested in seeing ROI calculator and customer references.
-Deal Stage: Stage 2 - Technical Validation
-Next Steps: TBD</pre>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <h2>ℹ️ Notes</h2>
-            </div>
-            <ul style="margin-left: 1.5rem; line-height: 2;">
-                <li>Uploaded files are saved to <code>data/uploaded_inputs/</code></li>
-                <li>Agent will extract context from the first 500 characters</li>
-                <li>If <code>HF_TOKEN</code> is not set, agent will use mock responses</li>
-                <li>Agent may escalate queries requiring legal, pricing, or executive decisions</li>
-                <li>All responses should be reviewed before using in customer communications</li>
-            </ul>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+    <div class="card">
+        <div class="card-body">
+            <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">📋 Lead Summary</h3>
+            <p style="font-size: 0.875rem; color: var(--gray-500); margin: 0;">Analyzes lead data and provides
+                qualification insights</p>
         </div>
     </div>
+    <div class="card">
+        <div class="card-body">
+            <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">📧 Follow-up</h3>
+            <p style="font-size: 0.875rem; color: var(--gray-500); margin: 0;">Suggests next actions based on
+                interaction history</p>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">⚠️ Risk Analysis</h3>
+            <p style="font-size: 0.875rem; color: var(--gray-500); margin: 0;">Identifies deal risks and mitigation
+                strategies</p>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">🧹 Data Hygiene</h3>
+            <p style="font-size: 0.875rem; color: var(--gray-500); margin: 0;">Flags data quality issues and duplicates
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
 
-    <footer>
-        <p>&copy; 2026 Databricks AI Agent Operations Simulator</p>
-    </footer>
-</body>
+{% block scripts %}
+<script>
+    function submitFeedback(helpful) {
+        const buttons = document.querySelectorAll('.feedback-btn');
+        buttons.forEach(btn => btn.classList.remove('active-up', 'active-down'));
 
-</html>
+        if (helpful) {
+            buttons[0].classList.add('active-up');
+        } else {
+            buttons[1].classList.add('active-down');
+        }
+
+        // TODO: Send feedback to server
+        console.log('Feedback submitted:', helpful);
+    }
+</script>
+{% endblock %}
